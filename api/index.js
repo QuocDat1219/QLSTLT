@@ -15,8 +15,10 @@ app.use(express.json());
 app.use(cors());
 
 const phanTanNgangRoutes = require("../routes/phanTanNgangRoutes");
+const tinhRoutes = require("../routes/tinhRoutes");
 
 app.use("/api", phanTanNgangRoutes);
+app.use("/api/tinh", tinhRoutes);
 
 app.use((req, res, next) => {
   if (res.headersSent) return next(err);
