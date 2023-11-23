@@ -491,7 +491,7 @@ const migateData = async (req, res) => {
       GiaBan number,
       GhiChu varchar2(100),
       MaNhanHang varchar2(20),
-      MaDanhMuc varchar2(20),
+      DanhMuc varchar2(20),
       CONSTRAINT pk_hanghoa PRIMARY KEY (MaHH)
     )`;
       await executeOracleQuery(oracleQueryHangHoa);
@@ -502,10 +502,10 @@ const migateData = async (req, res) => {
         const GiaBan = row.GiaBan;
         const GhiChu = row.GhiChu;
         const MaNhanHang = row.MaNhanHang;
-        const MaDanhMuc = row.MaDanhMuc;
+        const DanhMuc = row.DanhMuc;
 
-        const insertQueryHangHoa = `INSERT INTO HangHoa (MaHH, TenHH, GiaBan, GhiChu, MaNhanHang, MaDanhMuc)
-     VALUES (:MaHH, :TenHH, :GiaBan, :GhiChu, :MaNhanHang, :MaDanhMuc)`;
+        const insertQueryHangHoa = `INSERT INTO HangHoa (MaHH, TenHH, GiaBan, GhiChu, MaNhanHang, DanhMuc)
+     VALUES (:MaHH, :TenHH, :GiaBan, :GhiChu, :MaNhanHang, :DanhMuc)`;
 
         const insertParamsHangHoa = [
           MaHH,
@@ -513,7 +513,7 @@ const migateData = async (req, res) => {
           GiaBan,
           GhiChu,
           MaNhanHang,
-          MaDanhMuc,
+          DanhMuc,
         ];
         await executeOracleQuery(insertQueryHangHoa, insertParamsHangHoa);
       }
@@ -601,7 +601,7 @@ const migateData = async (req, res) => {
       }
       // Tạo khóa ngoại từ bảng HangHoa (MaDanhMuc) đến bảng DanhMucHH (MaDanhMuc)
       const alterQueryHangHoa =
-        "ALTER TABLE HangHoa ADD CONSTRAINT fk_hanghoa_danhmuc FOREIGN KEY (MaDanhMuc) REFERENCES DanhMucHH(MaDanhMuc)";
+        "ALTER TABLE HangHoa ADD CONSTRAINT fk_hanghoa_danhmuc FOREIGN KEY (DanhMuc) REFERENCES DanhMucHH(MaDanhMuc)";
       await executeOracleQuery(alterQueryHangHoa);
     }
 

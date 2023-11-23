@@ -16,9 +16,35 @@ app.use(cors());
 
 const phanTanNgangRoutes = require("../routes/phanTanNgangRoutes");
 const tinhRoutes = require("../routes/tinhRoutes");
+const chiNhanhRoutes = require("../routes/chiNhanhRoutes");
+const sieuThiRoutes = require("../routes/sieuThiRoutes");
+const nhanVienRoutes = require("../routes/nhanVienRoutes");
+const khachKhachRoutes = require("../routes/khachHangRoutes");
+const donHangRoutes = require("../routes/donHangRoutes");
+const chiTietDonHangRoutes = require("../routes/chiTietDonHangRoutes");
+const hangHoaRoutes = require("../routes/hangHoaRoutes");
+const nhanHangRoutes = require("../routes/nhanHangRoutes");
+const danhMucRoutes = require("../routes/danhMucRoutes");
+const khuyenMaiRoutes = require("../routes/khuyenMaiRoutes");
+const phieuNhapRoutes = require("../routes/phieuNhapRoutes");
+const cTPhieuNhapRoutes = require("../routes/ctPhieuNhapRoutes");
+const cTKhuyenMaiRoutes = require("../routes/ctKhuyenMaiRoutes");
 
 app.use("/api", phanTanNgangRoutes);
 app.use("/api/tinh", tinhRoutes);
+app.use("/api/chinhanh", chiNhanhRoutes);
+app.use("/api/sieuthi", sieuThiRoutes);
+app.use("/api/nhanvien", nhanVienRoutes);
+app.use("/api/khachhang", khachKhachRoutes);
+app.use("/api/donhang", donHangRoutes);
+app.use("/api/ctdonhang", chiTietDonHangRoutes);
+app.use("/api/hanghoa", hangHoaRoutes);
+app.use("/api/nhanhang", nhanHangRoutes);
+app.use("/api/danhmuc", danhMucRoutes);
+app.use("/api/khuyenmai", khuyenMaiRoutes);
+app.use("/api/phieunhap", phieuNhapRoutes);
+app.use("/api/ctphieunhap", cTPhieuNhapRoutes);
+app.use("/api/ctkhuyenmai", cTKhuyenMaiRoutes);
 
 app.use((req, res, next) => {
   if (res.headersSent) return next(err);
