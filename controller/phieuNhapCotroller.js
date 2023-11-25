@@ -13,8 +13,8 @@ const getAllPhieunhap = async (req, res) => {
         MaPN: row[0],
         NgayNhap: row[1],
         GhiChu: row[2],
-        NhanVien: row[3],
-        SieuThi: row[4],
+        MaNV: row[3],
+        MaST: row[4],
       };
     });
     res.json(jsonData);

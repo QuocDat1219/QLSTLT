@@ -4,7 +4,8 @@ const { checkUpdate, checkInsert } = require("../auth/checkInfo");
 
 const getAllKhachhang = async (req, res) => {
   try {
-    const oracleQuery = "SELECT * FROM khachhang";
+    const oracleQuery =
+      "SELECT MaKH, TenKH, kh.SDT as SDT, kh.DiaChi as DiaChi, TenST FROM khachhang kh inner join sieuthi st on st.MaST = kh.MaST";
     const result = await executeOracleQuery(oracleQuery);
     const rows = result.rows;
     const jsonData = rows.map((row) => {
