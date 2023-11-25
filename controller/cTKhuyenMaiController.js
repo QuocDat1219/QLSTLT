@@ -30,7 +30,9 @@ const getAllCtkhuyenmai = async (req, res) => {
 
 const getCtkhuyenmaiById = async (req, res) => {
   try {
-    const oracleQuery = `SELECT * FROM ctkhuyenmai WHERE MaKM = '${req.params.id}'`;
+
+    const oracleQuery = `SELECT ct.* ,hh.TenHH FROM ctkhuyenmai ct, hanghoa hh  WHERE hh.MaHH = ct.MaHH and MaKM = '${req.params.id}'`;
+
     const result = await executeOracleQuery(oracleQuery);
     const rows = result.rows;
     const jsonData = rows.map((row) => {
@@ -40,6 +42,7 @@ const getCtkhuyenmaiById = async (req, res) => {
         NgayApDung: row[2],
         NgayHetHan: row[3],
         MaHH: row[4],
+        TenHH: row[5],
       };
     });
     res.json(jsonData);
@@ -78,6 +81,7 @@ const addCtkhuyenmai = async (req, res) => {
     "INSERT INTO ctkhuyenmai (MaKM, MucGiam, NgayApDung, NgayHetHan, MaHH) VALUES (:1, :2, TO_DATE(:3, 'yyyy-mm-dd'), TO_DATE(:4, 'yyyy-mm-dd'), :5)";
   mySqlQuery = `INSERT INTO ctkhuyenmai VALUES('${MaKM}', '${MucGiam}', '${NgayApDung}', '${NgayHetHan}', '${MaHH}')`;
   const checkCtkhuyenmai = `SELECT COUNT(*) as count FROM ctkhuyenmai WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
+  console.log(checkCtkhuyenmai);
   try {
     const recordExists = await checkInsert(checkCtkhuyenmai);
     if (recordExists) {
@@ -107,25 +111,19 @@ const addCtkhuyenmai = async (req, res) => {
 };
 
 const updateCtkhuyenmai = async (req, res) => {
-  const { MaKM, MucGiam, NgayApDung, NgayHetHan, MaHH } = req.body;
+  const { MaKM, MucGiam, NgayApDung, NgayHetHan, MaHH,idMaHH } = req.body;
   console.log(MucGiam);
-  const oracleQuery = `UPDATE ctkhuyenmai SET MucGiam = :1, NgayApDung = TO_DATE(:2, 'yyyy-mm-dd'), NgayHetHan = TO_DATE(:3, 'yyyy-mm-dd') WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
+  const oracleQuery = `UPDATE ctkhuyenmai SET  MucGiam = :1, NgayApDung = TO_DATE(:2, 'yyyy-mm-dd'), NgayHetHan = TO_DATE(:3, 'yyyy-mm-dd') ,MaHH=:4 WHERE MaKM = '${MaKM}' AND MaHH = '${idMaHH}'`;
   const mySqlQuery = `UPDATE ctkhuyenmai SET MucGiam = '${MucGiam}', NgayApDung = '${NgayApDung}', NgayHetHan = '${NgayHetHan}' WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
-  const checkCtkhuyenmai = `SELECT COUNT(*) as count FROM ctkhuyenmai WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
 
   try {
-    const recordExists = await checkUpdate(checkCtkhuyenmai);
-    if (!recordExists) {
-      res.status(404).json({ message: "Không tìm thấy bản ghi để cập nhật" });
-      return;
-    }
-    console.log(oracleQuery);
+   
 
     mysqlConnection.query(mySqlQuery, (mysqlError) => {
       if (mysqlError) {
         res.status(500).json({ message: "Lỗi khi cập nhật ở MySQL" });
       } else {
-        executeOracleQuery(oracleQuery, [MucGiam, NgayApDung, NgayHetHan]);
+        executeOracleQuery(oracleQuery, [MucGiam, NgayApDung, NgayHetHan,MaHH]);
         res.json({ message: "Cập nhật chi tiết khuyến mãi thành công" });
       }
     });
@@ -136,9 +134,10 @@ const updateCtkhuyenmai = async (req, res) => {
 };
 
 const deleteCtkhuyenmai = async (req, res) => {
-  const { MaKM, MaHH } = req.params;
+  const { MaKM, MaHH } = req.body;
   const deleteQuery = `DELETE FROM ctkhuyenmai WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
   const checkCtkhuyenmai = `SELECT COUNT(*) as count FROM ctkhuyenmai WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
+  console.log(checkCtkhuyenmai);
   try {
     const recordExists = await checkInsert(checkCtkhuyenmai);
     if (!recordExists) {
