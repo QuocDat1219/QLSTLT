@@ -4,7 +4,7 @@ const { checkUpdate, checkInsert } = require("../auth/checkInfo");
 
 const getAllChinhanh = async (req, res) => {
   try {
-    const oracleQuery = "SELECT * FROM chinhanh";
+    const oracleQuery = "SELECT cn.* ,t.TenTinh FROM chinhanh cn, tinh t where cn.MaTinh = t.MaTinh";
     const result = await executeOracleQuery(oracleQuery);
     const rows = result.rows;
     const jsonData = rows.map((row) => {
@@ -13,6 +13,7 @@ const getAllChinhanh = async (req, res) => {
         TenCN: row[1],
         DiaChi: row[2],
         MaTinh: row[3],
+        TenTinh: row[4],
       };
     });
     res.json(jsonData);
