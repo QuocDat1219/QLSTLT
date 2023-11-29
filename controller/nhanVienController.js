@@ -1,6 +1,6 @@
 const { mysqlConnection } = require("../config/connectMysql");
 const { executeOracleQuery } = require("../config/connectOracle");
-const { checkUpdate, checkInsert } = require("../auth/checkInfo");
+const { checkUpdate, checkInsert, checkLogin } = require("../auth/checkInfo");
 
 const getAllNhanvien = async (req, res) => {
   try {
@@ -152,7 +152,7 @@ const deleteNhanvien = async (req, res) => {
 const nhanVienLogin = async (req, res) => {
   try {
     const checkTaiKhoan = `SELECT cOUNT(*) as count FROM taikhoan WHERE TenTk = '${req.body.taikhoan}' and MatKhau = '${req.body.matkhau}'`;
-    const recordExists = await checkInsert(checkTaiKhoan);
+    const recordExists = await checkLogin(checkTaiKhoan);
     if (!recordExists) {
       res.send({ message: "Sai tên tài khoản hoặc mật khẩu" });
     } else {
