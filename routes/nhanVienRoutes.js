@@ -7,8 +7,10 @@ const {
   addNhanvien,
   updateNhanvien,
   deleteNhanvien,
+  nhanVienLogin,
 } = require("../controller/nhanVienController");
 
+route.post("/login", nhanVienLogin);
 route.get("/", getAllNhanvien);
 route.get("/:id", getNhanvienById);
 route.post("/", addNhanvien);

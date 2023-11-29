@@ -29,6 +29,7 @@ const khuyenMaiRoutes = require("../routes/khuyenMaiRoutes");
 const phieuNhapRoutes = require("../routes/phieuNhapRoutes");
 const cTPhieuNhapRoutes = require("../routes/ctPhieuNhapRoutes");
 const cTKhuyenMaiRoutes = require("../routes/ctKhuyenMaiRoutes");
+const taiKhoanRoutes = require("../routes/taiKhoanRoutes");
 
 app.use("/api", phanTanNgangRoutes);
 app.use("/api/tinh", tinhRoutes);
@@ -45,6 +46,7 @@ app.use("/api/khuyenmai", khuyenMaiRoutes);
 app.use("/api/phieunhap", phieuNhapRoutes);
 app.use("/api/ctphieunhap", cTPhieuNhapRoutes);
 app.use("/api/ctkhuyenmai", cTKhuyenMaiRoutes);
+app.use("/api/taikhoan", taiKhoanRoutes);
 
 app.use((req, res, next) => {
   if (res.headersSent) return next(err);

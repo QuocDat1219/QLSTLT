@@ -149,10 +149,22 @@ const deleteNhanvien = async (req, res) => {
   }
 };
 
+const nhanVienLogin = async (req, res) => {
+  try {
+    const checkTaiKhoan = `SELECT cOUNT(*) as count FROM taikhoan WHERE TenTk = '${req.body.taikhoan}' and MatKhau = '${req.body.matkhau}'`;
+    const recordExists = await checkInsert(checkTaiKhoan);
+    if (!recordExists) {
+      res.send({ message: "Sai tên tài khoản hoặc mật khẩu" });
+    } else {
+      res.status(200).send({ message: "Đăng nhập thành công" });
+    }
+  } catch (error) {}
+};
 module.exports = {
   getAllNhanvien,
   getNhanvienById,
   addNhanvien,
   updateNhanvien,
   deleteNhanvien,
+  nhanVienLogin,
 };
