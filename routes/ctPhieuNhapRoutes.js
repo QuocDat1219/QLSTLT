@@ -15,5 +15,5 @@ route.get("/details", getCtPhieunhapkhoByDetail);
 route.get("/:id", getCtPhieunhapkhoById);
 route.post("/", addCtPhieunhapkho);
 route.put("/", updateCtPhieunhapkho);
-route.delete("/:id", deleteCtPhieunhapkho);
+route.post("/delete", deleteCtPhieunhapkho);
 module.exports = route;

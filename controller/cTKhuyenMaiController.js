@@ -114,7 +114,7 @@ const updateCtkhuyenmai = async (req, res) => {
   const { MaKM, MucGiam, NgayApDung, NgayHetHan, MaHH,idMaHH } = req.body;
   console.log(MucGiam);
   const oracleQuery = `UPDATE ctkhuyenmai SET  MucGiam = :1, NgayApDung = TO_DATE(:2, 'yyyy-mm-dd'), NgayHetHan = TO_DATE(:3, 'yyyy-mm-dd') ,MaHH=:4 WHERE MaKM = '${MaKM}' AND MaHH = '${idMaHH}'`;
-  const mySqlQuery = `UPDATE ctkhuyenmai SET MucGiam = '${MucGiam}', NgayApDung = '${NgayApDung}', NgayHetHan = '${NgayHetHan}' WHERE MaKM = '${MaKM}' AND MaHH = '${MaHH}'`;
+  const mySqlQuery = `UPDATE ctkhuyenmai SET MaHH='${MaHH}', MucGiam = '${MucGiam}', NgayApDung = '${NgayApDung}', NgayHetHan = '${NgayHetHan}' WHERE MaKM = '${MaKM}' AND MaHH = '${idMaHH}'`;
 
   try {
    

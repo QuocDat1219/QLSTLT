@@ -36,7 +36,7 @@ const getAllCtPhieunhapkho = async (req, res) => {
 
 const getCtPhieunhapkhoById = async (req, res) => {
   try {
-    const oracleQuery = `SELECT * FROM ctphieunhapkho WHERE MaPN = '${req.params.id}'`;
+    const oracleQuery = `SELECT ct.* , hh.TenHH FROM ctphieunhapkho ct , hanghoa hh WHERE ct.MaHH = hh.MaHH and MaPN = '${req.params.id}'`;
     const result = await executeOracleQuery(oracleQuery);
     const rows = result.rows;
     const jsonData = rows.map((row) => {
@@ -48,6 +48,7 @@ const getCtPhieunhapkhoById = async (req, res) => {
         ThanhTien: row[4],
         DVT: row[5],
         MaHH: row[6],
+        TenHH: row[7],
       };
     });
     res.json(jsonData);
@@ -119,31 +120,26 @@ const addCtPhieunhapkho = async (req, res) => {
 };
 
 const updateCtPhieunhapkho = async (req, res) => {
-  const { MaPN, GiaNhap, GiaBan, SoLuong, ThanhTien, DVT, MaHH } = req.body;
+  const { MaPN, GiaNhap, GiaBan, SoLuong, ThanhTien, DVT, MaHH, idMaHH } = req.body;
   const oracleQuery =
-    "UPDATE ctphieunhapkho SET GiaNhap = :2, GiaBan = :3, SoLuong = :4, ThanhTien = :5, DVT = :6 WHERE MaPN = :1 AND MaHH = :7";
-  const mySqlQuery = `UPDATE ctphieunhapkho SET GiaNhap = '${GiaNhap}', GiaBan = '${GiaBan}', SoLuong = '${SoLuong}', ThanhTien = '${ThanhTien}', DVT = N'${DVT}' WHERE MaPN = '${MaPN}' AND MaHH = '${MaHH}'`;
-  const checkCtPhieunhapkho = `SELECT COUNT(*) as count FROM ctphieunhapkho WHERE MaPN = '${MaPN}' AND MaHH = '${MaHH}'`;
+    `UPDATE ctphieunhapkho SET MaHH = :1, GiaNhap = :2, GiaBan = :3, SoLuong = :4, ThanhTien = :5, DVT = :6 WHERE MaPN = '${MaPN}' AND MaHH = '${idMaHH}'`;
+  const mySqlQuery = `UPDATE ctphieunhapkho SET MaHH='${MaHH}', GiaNhap = '${GiaNhap}', GiaBan = '${GiaBan}', SoLuong = '${SoLuong}', ThanhTien = '${ThanhTien}', DVT = N'${DVT}' WHERE MaPN = '${MaPN}' AND MaHH = '${idMaHH}'`;
 
   try {
-    const recordExists = await checkUpdate(checkCtPhieunhapkho);
-    if (!recordExists) {
-      res.status(404).json({ message: "Không tìm thấy bản ghi để cập nhật" });
-      return;
-    }
+  
 
     mysqlConnection.query(mySqlQuery, (mysqlError) => {
       if (mysqlError) {
         res.status(500).json({ message: "Lỗi khi cập nhật ở MySQL" });
       } else {
         executeOracleQuery(oracleQuery, [
-          MaPN,
+          MaHH,
           GiaNhap,
           GiaBan,
           SoLuong,
           ThanhTien,
           DVT,
-          MaHH,
+       
         ]);
         res.json({ message: "Cập nhật chi tiết phiếu nhập kho thành công" });
       }
@@ -155,7 +151,7 @@ const updateCtPhieunhapkho = async (req, res) => {
 };
 
 const deleteCtPhieunhapkho = async (req, res) => {
-  const { MaPN, MaHH } = req.params;
+  const { MaPN, MaHH } = req.body;
   const deleteQuery = `DELETE FROM ctphieunhapkho WHERE MaPN = '${MaPN}' AND MaHH = '${MaHH}'`;
   const checkCtPhieunhapkho = `SELECT COUNT(*) as count FROM ctphieunhapkho WHERE MaPN = '${MaPN}' AND MaHH = '${MaHH}'`;
   try {

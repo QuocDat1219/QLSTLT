@@ -15,5 +15,5 @@ route.get("/details", getCtdonhangByDeTail);
 route.get("/:id", getCtdonhangById);
 route.post("/", addCtdonhang);
 route.put("/", updateCtdonhang);
-route.delete("/:id", deleteCtdonhang);
+route.post("/delete", deleteCtdonhang);
 module.exports = route;
