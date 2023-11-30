@@ -156,9 +156,22 @@ const nhanVienLogin = async (req, res) => {
     if (!recordExists) {
       res.send({ message: "Sai tên tài khoản hoặc mật khẩu" });
     } else {
-      res.status(200).send({ message: "Đăng nhập thành công" });
+      const userInfo = `select nv.MaNV as MaNV, HoTen,SDT,Email,Quyen from taikhoan tk inner join nhanvien nv on tk.MaNV = nv.MaNV where tk.TenTK = '${req.body.taikhoan}' and tk.MatKhau = '${req.body.matkhau}'`;
+      const result = await executeOracleQuery(userInfo);
+      const rows = result.rows;
+      const jsonData = rows.map((row) => {
+        return {
+          MaNV: row[0],
+          HoTen: row[1],
+          SDT: row[2],
+          Email: row[3],
+          Quyen: row[4],
+        };
+      });
+      res.json(jsonData);
     }
   } catch (error) {
+    console.error(error);
     res.send({ message: "Lỗi trong quá trình đăng nhập" });
   }
 };

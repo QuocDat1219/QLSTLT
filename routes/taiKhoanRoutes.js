@@ -13,5 +13,5 @@ route.get("/", getAllTaikhoan);
 route.get("/:id", getTaikhoanById);
 route.post("/", addTaikhoan);
 route.put("/", updateTaikhoan);
-route.delete("/:TenTK", deleteTaikhoan);
+route.delete("/:id", deleteTaikhoan);
 module.exports = route;

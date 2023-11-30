@@ -1,6 +1,7 @@
 const { mysqlConnection } = require("../config/connectMysql");
 const { executeOracleQuery } = require("../config/connectOracle");
 const { checkUpdate, checkInsert } = require("../auth/checkInfo");
+const bcrypt = require("bcrypt");
 
 const getAllTaikhoan = async (req, res) => {
   try {
@@ -9,11 +10,13 @@ const getAllTaikhoan = async (req, res) => {
       INNER JOIN nhanvien nv ON tk.MaNV = nv.MaNV`;
     const result = await executeOracleQuery(oracleQuery);
     const rows = result.rows;
+
     const jsonData = rows.map((row) => {
+      const password = bcrypt.hashSync(row[2], 10);
       return {
         TenTK: row[0],
         MaNV: row[1],
-        Matkhau: row[2],
+        Matkhau: password,
         Quyen: row[3],
       };
     });
@@ -102,9 +105,10 @@ const updateTaikhoan = async (req, res) => {
 };
 
 const deleteTaikhoan = async (req, res) => {
-  const { TenTK } = req.params;
-  const deleteQuery = `DELETE FROM taikhoan WHERE TenTK = '${TenTK}'`;
-  const checkTaikhoan = `SELECT COUNT(*) as count FROM taikhoan WHERE TenTK = '${TenTK}'`;
+  const { id } = req.params;
+  console.log(id);
+  const deleteQuery = `DELETE FROM taikhoan WHERE TenTK = '${id}'`;
+  const checkTaikhoan = `SELECT COUNT(*) as count FROM taikhoan WHERE TenTK = '${id}'`;
   try {
     const recordExists = await checkInsert(checkTaikhoan);
     if (!recordExists) {
