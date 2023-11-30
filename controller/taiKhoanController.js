@@ -106,7 +106,6 @@ const updateTaikhoan = async (req, res) => {
 
 const deleteTaikhoan = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const deleteQuery = `DELETE FROM taikhoan WHERE TenTK = '${id}'`;
   const checkTaikhoan = `SELECT COUNT(*) as count FROM taikhoan WHERE TenTK = '${id}'`;
   try {
